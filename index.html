@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBISL Campus - Business Etiquette Bilingual Practicum</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for professional look and Sinhala support -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Sinhala:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- React & Babel CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* Custom Scrollbar Removal for glass layout sidebar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Elegant Glowing Orbs background effect */
+    .glow-orb {
+      filter: blur(120px);
+      pointer-events: none;
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+    }
+
+    /* Print Custom Styles */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 12px;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      .print-card {
+        background: #f9fafb !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: none !important;
+        color: #111827 !important;
+      }
+      .print-text-dark {
+        color: #111827 !important;
+      }
+      .print-text-muted {
+        color: #4b5563 !important;
+      }
+    }
+  </style>
+
+  <script>
+    // Tailwind Config setup
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            tech: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+              950: '#172554'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            sinhala: ['Noto Sans Sinhala', 'Iskoola Pota', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen relative overflow-x-hidden selection:bg-brand-500 selection:text-slate-950">
+
+  <!-- Background Orbs -->
+  <div class="glow-orb bg-brand-900/15 w-[400px] h-[400px] top-10 left-10"></div>
+  <div class="glow-orb bg-tech-900/15 w-[500px] h-[500px] bottom-10 right-10"></div>
+
+  <!-- React Root container -->
+  <div id="root"></div>
+
+  <!-- React Logic Script -->
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // --- CUSTOM RAW SVG INLINE ICONS ---
+    const IconCase = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    );
+
+    const IconDeepDive = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+      </svg>
+    );
+
+    const IconScenario = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+    );
+
+    const IconDiagnostic = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+    );
+
+    const IconSim1 = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    );
+
+    const IconSim2 = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    );
+
+    const IconSim3 = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+      </svg>
+    );
+
+    const IconChat = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+      </svg>
+    );
+
+    const IconPrint = () => (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+      </svg>
+    );
+
+    // --- BILINGUAL TEXT RENDERER COMPONENT ---
+    // Safely renders English and Sinhala strings depending on state
+    const DualLangText = ({ en, si, mode, className = "" }) => {
+      if (mode === 'en') {
+        return <span className={`block text-slate-100 ${className}`}>{en}</span>;
+      }
+      if (mode === 'si') {
+        return <span className={`block text-slate-100 font-sinhala leading-relaxed ${className}`}>{si}</span>;
+      }
+      return (
+        <span className={`block ${className}`}>
+          <span className="block text-slate-100">{en}</span>
+          <span className="block text-xs md:text-sm text-slate-400 italic font-sinhala mt-1 leading-relaxed">{si}</span>
+        </span>
+      );
+    };
+
+    // --- MAIN REACT COMPONENT ---
+    function App() {
+      const [activeTab, setActiveTab] = useState('case');
+      const [langMode, setLangMode] = useState('both'); // 'both' | 'en' | 'si'
+      
+      // Interactive State elements
+      // Tab 4 State (Diagnostics Sliders)
+      const [eyeSlider, setEyeSlider] = useState(7);
+      const [handshakeSlider, setHandshakeSlider] = useState(8);
+      const [attireSlider, setAttireSlider] = useState(6);
+      const [voiceSlider, setVoiceSlider] = useState(7);
+      
+      const [responseTime, setResponseTime] = useState(4); // hours
+      const [emojisCount, setEmojisCount] = useState(6);
+      const [capsOn, setCapsOn] = useState(false);
+
+      // Tab 5 State (Simulation 1 - Email Builder)
+      const [emailSalutation, setEmailSalutation] = useState('formal');
+      const [emailTone, setEmailTone] = useState('assertive');
+      const [emailClosing, setEmailClosing] = useState('formal');
+      const [isAnalyzingEmail, setIsAnalyzingEmail] = useState(false);
+      const [analysisOutput, setAnalysisOutput] = useState(null);
+
+      // Tab 6 State (Simulation 2 - Cascade)
+      const [cascadePosture, setCascadePosture] = useState('upright');
+      const [cascadeGreeting, setCascadeGreeting] = useState('perfect');
+
+      // Tab 7 State (Simulation 3 - Workflow)
+      const [workflowType, setWorkflowType] = useState('boardroom');
+
+      // Tab 8 State (Breakout Rooms)
+      const [activePrompt, setActivePrompt] = useState(1);
+      const [votes, setVotes] = useState({ 1: { yes: 14, no: 3 }, 2: { yes: 18, no: 1 }, 3: { yes: 9, no: 12 }, 4: { yes: 22, no: 2 }, 5: { yes: 15, no: 8 } });
+      const [userVoted, setUserVoted] = useState({});
+
+      const handleVote = (promptId, type) => {
+        if (userVoted[promptId]) return;
+        setVotes(prev => ({
+          ...prev,
+          [promptId]: {
+            ...prev[promptId],
+            [type]: prev[promptId][type] + 1
+          }
+        }));
+        setUserVoted(prev => ({ ...prev, [promptId]: type }));
+      };
+
+      // Handler to simulate Email analyzer
+      const triggerEmailAnalysis = () => {
+        setIsAnalyzingEmail(true);
+        setTimeout(() => {
+          setIsAnalyzingEmail(false);
+          let score = 0;
+          let feedbackEn = "";
+          let feedbackSi = "";
+          let level = "MEDIUM RISK";
+          let color = "text-yellow-400 border-yellow-500/30";
+
+          if (emailSalutation === 'formal') score += 35;
+          if (emailTone === 'assertive') score += 35;
+          if (emailTone === 'passive') score += 20;
+          if (emailClosing === 'formal') score += 30;
+
+          if (score >= 90) {
+            level = "EXCELLENT IMPACT (විශිෂ්ට බලපෑමක්)";
+            feedbackEn = "This email signals supreme professionalism and respect for corporate hierarchy.";
+            feedbackSi = "මෙම විද්‍යුත් තැපෑල මඟින් ඉහළ වෘත්තීය මට්ටමක් සහ ආයතනික ධුරාවලියට ගරු කිරීමක් පෙන්නුම් කරයි.";
+            color = "text-emerald-400 border-emerald-500/30";
+          } else if (score >= 60) {
+            level = "MODERATE RISK (මධ්‍යස්ථ අවදානම)";
+            feedbackEn = "Acceptable, but has informal areas. Tone could be sharpened to sound more executive.";
+            feedbackSi = "පිළිගත හැකි නමුත් යම් අවිධිමත් කොටස් ඇත. තවදුරටත් විධායක මට්ටමට සකස් කළ හැක.";
+            color = "text-yellow-400 border-yellow-500/30";
+          } else {
+            level = "CRITICAL FAIL (අතිශය අවදානම්)";
+            feedbackEn = "Severe Etiquette Gaffe! Highly likely to damage first impressions or trigger conflict.";
+            feedbackSi = "බරපතල ආචාරධර්ම කඩවීමක්! පළමු හැඟීම විනාශ කිරීමට හෝ ගැටුමක් ඇති කිරීමට ඉහළ ඉඩක් ඇත.";
+            color = "text-red-400 border-red-500/30";
+          }
+
+          setAnalysisOutput({ score, level, feedbackEn, feedbackSi, color });
+        }, 1200);
+      };
+
+      // Calculation for Executive Presence score
+      const epScore = parseFloat(((eyeSlider * 0.25) + (handshakeSlider * 0.25) + (attireSlider * 0.25) + (voiceSlider * 0.25)).toFixed(1));
+
+      // Calculation for Netiquette Risk Index
+      const calculateNetiquetteRisk = () => {
+        let riskVal = 0;
+        if (responseTime > 12) riskVal += 3;
+        if (responseTime > 24) riskVal += 4;
+        riskVal += Math.min(emojisCount * 1.2, 5);
+        if (capsOn) riskVal += 4;
+        return parseFloat(Math.min(riskVal, 10).toFixed(1));
+      };
+      const netiquetteRisk = calculateNetiquetteRisk();
+
+      // Sidebar configuration
+      const tabs = [
+        { id: 'case', labelEn: 'Case Insight', labelSi: 'සිද්ධිය', icon: <IconCase /> },
+        { id: 'deep', labelEn: 'Deep Dive Analysis', labelSi: 'විශ්ලේෂණය', icon: <IconDeepDive /> },
+        { id: 'scenario', labelEn: 'Scenario Suite', labelSi: 'ප්‍රායෝගික සිදුවීම්', icon: <IconScenario /> },
+        { id: 'diagnostic', labelEn: 'Diagnostic Lab', labelSi: 'පරීක්ෂණාගාරය', icon: <IconDiagnostic /> },
+        { id: 'sim1', labelEn: 'Email Simulator', labelSi: 'ඊමේල් සිමියුලේටර්', icon: <IconSim1 /> },
+        { id: 'sim2', labelEn: 'The Cascade', labelSi: 'ප්‍රතිවිපාක දාමය', icon: <IconSim2 /> },
+        { id: 'sim3', labelEn: 'Workflow Sim', labelSi: 'වැඩ ප්‍රවාහය', icon: <IconSim3 /> },
+        { id: 'chat', labelEn: 'Breakout Rooms', labelSi: 'කණ්ඩායම් කාමර', icon: <IconChat /> }
+      ];
+
+      return (
+        <div className="flex flex-col min-h-screen relative z-10">
+          
+          {/* STICKY TOP HEADER */}
+          <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/60 py-3 px-4 md:px-6 flex justify-between items-center no-print">
+            <div className="flex items-center space-x-3">
+              <span className="bg-brand-600 text-slate-950 text-xs font-extrabold px-2 py-1 rounded tracking-wider font-sans">OBISL CAMPUS</span>
+              <div>
+                <h1 className="text-sm md:text-base font-bold text-white tracking-tight">MODULE 04: BUSINESS ETIQUETTE PRACTICUM</h1>
+                <p className="text-xs text-slate-400 font-sans hidden md:block">Interactive Bilingual Command Hub (30-Min Session)</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              {/* Language Switcher Button Group */}
+              <div className="bg-slate-900 border border-slate-800/80 p-0.5 rounded-lg flex space-x-0.5">
+                <button 
+                  onClick={() => setLangMode('both')}
+                  className={`px-3 py-1 text-xs font-medium rounded transition ${langMode === 'both' ? 'bg-brand-600 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-100'}`}
+                >
+                  EN + සිං
+                </button>
+                <button 
+                  onClick={() => setLangMode('en')}
+                  className={`px-3 py-1 text-xs font-medium rounded transition ${langMode === 'en' ? 'bg-brand-600 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-100'}`}
+                >
+                  English
+                </button>
+                <button 
+                  onClick={() => setLangMode('si')}
+                  className={`px-3 py-1 text-xs font-medium rounded transition font-sinhala ${langMode === 'si' ? 'bg-brand-600 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-100'}`}
+                >
+                  සිංහල
+                </button>
+              </div>
+
+              {/* Status Indicator */}
+              <div className="flex items-center space-x-2 bg-slate-900/60 border border-slate-800 px-3 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="text-xs text-emerald-400 font-mono tracking-widest uppercase">Live</span>
+              </div>
+            </div>
+          </header>
+
+          <div className="flex-1 flex flex-col md:flex-row relative">
+            
+            {/* FIXED SIDEBAR NAV (HIDDEN SCROLLBAR) */}
+            <aside className="w-full md:w-64 bg-slate-950/60 md:bg-transparent border-r-0 md:border-r border-slate-800/50 p-4 flex flex-col justify-between space-y-4 no-scrollbar shrink-0 no-print">
+              <div className="space-y-1.5">
+                <p className="text-[10px] uppercase tracking-widest text-slate-500 px-3 mb-2 font-bold font-sans">
+                  <DualLangText en="COMMAND CENTER TABS" si="පාලන පුවරු පටිති" mode={langMode} />
+                </p>
+                <nav className="space-y-1">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition group relative ${
+                        activeTab === tab.id
+                          ? 'bg-slate-900 border border-brand-500/30 text-brand-400 font-semibold'
+                          : 'hover:bg-slate-900/40 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <span className={`transition-transform duration-200 group-hover:scale-110 ${activeTab === tab.id ? 'text-brand-400' : 'text-slate-500'}`}>
+                        {tab.icon}
+                      </span>
+                      <div className="flex-1 text-xs md:text-sm leading-tight">
+                        <DualLangText en={tab.labelEn} si={tab.labelSi} mode={langMode} />
+                      </div>
+                      
+                      {/* Tooltip for desktop only */}
+                      <div className="absolute left-full ml-2 px-2 py-1 bg-slate-900 text-[10px] text-slate-300 rounded shadow-md opacity-0 group-hover:opacity-100 transition duration-150 pointer-events-none z-50 whitespace-nowrap hidden md:block border border-slate-800">
+                        {tab.labelEn}
+                      </div>
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Sidebar bottom panel with Print utility */}
+              <div className="pt-4 border-t border-slate-900">
+                <button
+                  onClick={() => window.print()}
+                  className="w-full flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-850 text-slate-300 hover:text-white px-3 py-2.5 rounded-lg border border-slate-800 transition text-xs font-semibold"
+                >
+                  <IconPrint />
+                  <DualLangText en="EXPORT SESSION / PRINT" si="සාරාංශය මුද්‍රණය කරන්න" mode={langMode} />
+                </button>
+                <div className="mt-2 text-center">
+                  <p className="text-[9px] text-slate-500">© 2026 OBISL Campus Ltd.</p>
+                </div>
+              </div>
+            </aside>
+
+            {/* MAIN DYNAMIC CONTENT CONTAINER */}
+            <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto print-container">
+              
+              {/* PRINT ONLY HEADER */}
+              <div className="hidden print-only border-b-2 border-slate-900 pb-4 mb-6">
+                <h1 className="text-2xl font-bold">OBISL CAMPUS PRACTICUM WORKSHEET</h1>
+                <h2 className="text-lg font-semibold text-gray-700">Module 04: Business Etiquette - Bilingual Realization</h2>
+                <p className="text-sm text-gray-500">Practicum Date: May 2026 | Active Hub Content Session Output</p>
+              </div>
+
+              {/* DYNAMIC TAB SWITCHING LOGIC */}
+              
+              {/* TAB 1: CASE INSIGHT */}
+              {activeTab === 'case' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">🌐</span>
+                      <DualLangText en="CASE INSIGHT: The Cost of a Seven-Second Gaffe" si="සිද්ධිය: තත්පර 7ක වැරැද්දකින් සිදු වූ බරපතල පාඩුව" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  {/* Summary of Ground Truth Case */}
+                  <div className="bg-slate-900/60 border border-slate-800/85 rounded-xl p-4 md:p-5 print-card">
+                    <p className="text-xs font-bold text-brand-400 uppercase tracking-widest mb-1 font-mono">Bilingual Case Synthesis | ද්විභාෂා සිද්ධි අධ්‍යනය</p>
+                    <DualLangText 
+                      en="A high-growth tech startup in Colombo pitched to a conservative institutional fund. Within the first 7 seconds, the lead founder did not stand up, gave a weak nod, and sent a causal WhatsApp invitation instead of following formal corporate lines. The deal collapsed instantly, citing lack of executive presence and corporate respect."
+                      si="කොළඹ පිහිටි ශීඝ්‍රයෙන් වර්ධනය වන තාක්ෂණික සමාගමක් සම්ප්‍රදායික ආයතනික ආයෝජන අරමුදලකට ඉදිරිපත් කිරීමක් සිදු කළේය. ආරම්භක තත්පර 7 ඇතුළත, ප්‍රධාන නිර්මාතෘවරයා ආචාර කිරීමට නැගී නොසිටි අතර, දුර්වල හිස සැලීමක් පමණක් සිදු කර, විධිමත් ආයතනික ක්‍රමවේද වෙනුවට වට්ස්ඇප් (WhatsApp) මඟින් අනියම් ලෙස ආරාධනයක් යැවීය. ඔවුන්ගේ විධායක පෞරුෂයේ දුර්වලතාවය හේතුවෙන් ආයෝජන ගනුදෙනුව එසැණින් අවලංගු විය." 
+                      mode={langMode}
+                      className="text-sm md:text-base text-slate-300 leading-relaxed"
+                    />
+                  </div>
+
+                  {/* Problem - Approach - Result Color-Coded Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    {/* Problem (Red Theme) */}
+                    <div className="bg-red-950/20 border border-red-900/30 rounded-xl p-4 md:p-5 print-card">
+                      <div className="w-8 h-8 rounded-lg bg-red-900/30 flex items-center justify-center text-red-400 font-bold mb-3">!</div>
+                      <h3 className="text-sm font-bold text-red-300 mb-2 uppercase tracking-wider">
+                        <DualLangText en="The Problem" si="ගැටලුව" mode={langMode} />
+                      </h3>
+                      <DualLangText 
+                        en="Zero respect for corporate hierarchy; casual speech/dress during pitch. Used instant messaging to address complex corporate processes, violating key netiquette protocols."
+                        si="ආයතනික ධුරාවලියට ගරු නොකිරීම, ඉදිරිපත් කිරීමේදී අනියම් ඇඳුම් සහ කථන විලාසය. සංකීර්ණ ආයතනික ක්‍රියාවලීන් සඳහා වට්ස්ඇප් භාවිතය නෙටිකට් නීති බරපතල ලෙස කඩකිරීමකි."
+                        mode={langMode}
+                        className="text-xs md:text-sm text-slate-300 leading-relaxed"
+                      />
+                    </div>
+
+                    {/* Approach (Blue Theme) */}
+                    <div className="bg-tech-950/20 border border-tech-900/30 rounded-xl p-4 md:p-5 print-card">
+                      <div className="w-8 h-8 rounded-lg bg-tech-900/30 flex items-center justify-center text-tech-400 font-bold mb-3">⚙️</div>
+                      <h3 className="text-sm font-bold text-tech-300 mb-2 uppercase tracking-wider">
+                        <DualLangText en="The Approach" si="ක්‍රමවේදය" mode={langMode} />
+                      </h3>
+                      <DualLangText 
+                        en="Retrained the leadership on first impressions (The 7-Second Rule), formal office greetings, proper hierarchical email communication, and WhatsApp time/content restrictions."
+                        si="පළමු හැඟීම (තත්පර 7 රීතිය), විධිමත් කාර්යාල ආචාර කිරීම්, ධුරාවලියට ගැලපෙන විද්‍යුත් තැපෑල සහ වට්ස්ඇප් භාවිත සීමාවන් පිළිබඳව කළමනාකාරීත්වය නැවත පුහුණු කිරීම."
+                        mode={langMode}
+                        className="text-xs md:text-sm text-slate-300 leading-relaxed"
+                      />
+                    </div>
+
+                    {/* Result (Green Theme) */}
+                    <div className="bg-brand-950/20 border border-brand-900/30 rounded-xl p-4 md:p-5 print-card">
+                      <div className="w-8 h-8 rounded-lg bg-brand-900/30 flex items-center justify-center text-brand-400 font-bold mb-3">✓</div>
+                      <h3 className="text-sm font-bold text-brand-300 mb-2 uppercase tracking-wider">
+                        <DualLangText en="The Result" si="ප්‍රතිඵලය" mode={langMode} />
+                      </h3>
+                      <DualLangText 
+                        en="Re-pitched with robust physical presence and high-impact written netiquette. Secured $500k in seed round, proving corporate etiquette directly maps to capital generation."
+                        si="ඉහළ විධායක පෞරුෂයක් සහ විධිමත් නෙටිකට් රටාවන් සහිතව නැවත ආයෝජන සාකච්ඡා ඇරඹීය. ඩොලර් 500,000ක ආයෝජනයක් දිනා ගනිමින් ව්‍යාපාරික ආචාරශීලීත්වය ප්‍රාග්ධනයට සෘජුවම බලපාන බව ඔප්පු කළේය."
+                        mode={langMode}
+                        className="text-xs md:text-sm text-slate-300 leading-relaxed"
+                      />
+                    </div>
+
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 2: DEEP DIVE ANALYSIS */}
+              {activeTab === 'deep' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">🏢</span>
+                      <DualLangText en="DEEP DIVE: Key Theoretical Conflicts" si="විශ්ලේෂණය: ප්‍රධාන න්‍යායාත්මක ගැටුම්" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="space-y-4">
+                    
+                    {/* Conflict Card 1 */}
+                    <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-5 hover:border-brand-500/20 transition duration-200 print-card">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                        <span className="text-xs font-bold text-brand-400 uppercase tracking-widest font-mono">TRAIT 1 | ධුරාවලිය සහ වාර්තා කිරීම්</span>
+                        <span className="px-2.5 py-0.5 bg-slate-850 text-[10px] text-slate-400 rounded-full font-mono mt-1 md:mt-0">Office Protocols</span>
+                      </div>
+                      <h3 className="text-base font-bold text-slate-100 mb-2">
+                        <DualLangText en="Understanding Corporate Hierarchy vs Flat Communication" si="ආයතනික ධුරාවලිය සහ සරල සන්නිවේදනය අතර ගැටුම" mode={langMode} />
+                      </h3>
+                      <DualLangText 
+                        en="While modern offices encourage open flat-org channels, ignoring formal reporting lines for executive decisions undermines senior management and violates core discipline rules."
+                        si="නූතන කාර්යාල විවෘත සන්නිවේදනයක් දිරිගැන්වූවද, තීරණ ගැනීමේදී විධිමත් වාර්තාකරණ ධුරාවලිය මඟ හැරීම ජ්‍යෙෂ්ඨ කළමනාකාරීත්වය අවතක්සේරු කිරීමක් සහ මූලික විනය නීති උල්ලංඝනය කිරීමකි."
+                        mode={langMode}
+                        className="text-xs md:text-sm text-slate-400 leading-relaxed"
+                      />
+                    </div>
+
+                    {/* Conflict Card 2 */}
+                    <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-5 hover:border-brand-500/20 transition duration-200 print-card">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                        <span className="text-xs font-bold text-tech-400 uppercase tracking-widest font-mono">TRAIT 2 | 7-තත්පර රීතිය</span>
+                        <span className="px-2.5 py-0.5 bg-slate-850 text-[10px] text-slate-400 rounded-full font-mono mt-1 md:mt-0">Executive Presence</span>
+                      </div>
+                      <h3 className="text-base font-bold text-slate-100 mb-2">
+                        <DualLangText en="Non-Verbal Communication and Instant Judgment" si="වාචික නොවන සන්නිවේදනය සහ ක්ෂණික තීරණ ගැනීම්" mode={langMode} />
+                      </h3>
+                      <DualLangText 
+                        en="The human brain makes a persistent competency evaluation in the first 7 seconds of an interaction. Posture, eye alignment, and hand grip strength dictate this silent formula."
+                        si="මිනිස් මොළය පුද්ගලයෙකු දකින පළමු තත්පර 7 ඇතුළත ඔහුගේ නිපුණතාවය තක්සේරු කරයි. ශරීර ඉරියව්ව, ඇස් සම්බන්ධතාව සහ අතට අත දීමේ ශක්තිය මෙම නිහඬ තක්සේරුව තීරණය කරයි."
+                        mode={langMode}
+                        className="text-xs md:text-sm text-slate-400 leading-relaxed"
+                      />
+                    </div>
+
+                    {/* Conflict Card 3 */}
+                    <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-5 hover:border-brand-500/20 transition duration-200 print-card">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                        <span className="text-xs font-bold text-amber-400 uppercase tracking-widest font-mono">TRAIT 3 | ඩිජිටල් නෙටිකට්</span>
+                        <span className="px-2.5 py-0.5 bg-slate-850 text-[10px] text-slate-400 rounded-full font-mono mt-1 md:mt-0">Digital Channels</span>
+                      </div>
+                      <h3 className="text-base font-bold text-slate-100 mb-2">
+                        <DualLangText en="Email Writing vs Modern Instant Messaging (WhatsApp)" si="විද්‍යුත් තැපෑල සහ වට්ස්ඇප් සන්නිවේදනයේ වෙනස" mode={langMode} />
+                      </h3>
+                      <DualLangText 
+                        en="Instant apps lead to hyper-informal errors (emojis, typos, off-hour texts). Formal business requests must preserve the rigorous structure of professional business emails."
+                        si="වට්ස්ඇප් වැනි මාධ්‍යයන් තුළින් අවිධිමත් වැරදි (ඉමෝජි, අකුරු දෝෂ, නුසුදුසු වේලාවන්) සිදුවීමේ ඉඩ වැඩිය. විධිමත් ව්‍යාපාරික ඉල්ලීම් සැමවිටම ඊමේල් මඟින් සිදු කළ යුතුය."
+                        mode={langMode}
+                        className="text-xs md:text-sm text-slate-400 leading-relaxed"
+                      />
+                    </div>
+
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 3: SCENARIO SUITE */}
+              {activeTab === 'scenario' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">🧪</span>
+                      <DualLangText en="SCENARIO SUITE: Real-World Business Cases" si="ප්‍රායෝගික සිදුවීම්: සැබෑ ලෝකයේ ව්‍යාපාරික ගැටලු" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    {/* Scenario A */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between print-card">
+                      <div>
+                        <span className="text-[10px] font-mono bg-brand-900/50 text-brand-300 px-2 py-0.5 rounded-full uppercase tracking-wider">Scenario A | සිදුවීම A</span>
+                        <h3 className="text-base font-bold text-white mt-3 mb-2">
+                          <DualLangText en="The Over-Friendly Email Gaffe" si="අතිශය මිත්‍රශීලී විද්‍යුත් තැපෑල" mode={langMode} />
+                        </h3>
+                        <DualLangText 
+                          en="An executive sends an email to the Managing Director with 'Hey Chief! Check this file ASAP 🙂👍' in bold red colors."
+                          si="නිලධාරියෙකු විසින් කළමනාකාර අධ්‍යක්ෂවරයා වෙත 'හේයි චීෆ්! ඉක්මනින් මේ ෆයිල් එක බලන්න 🙂👍' යනුවෙන් ඊමේල් පණිවිඩයක් යවයි."
+                          mode={langMode}
+                          className="text-xs text-slate-300 leading-relaxed"
+                        />
+                      </div>
+                      <div className="mt-5 pt-3 border-t border-slate-800/80">
+                        <span className="text-xs font-semibold text-red-400 block mb-1">
+                          <DualLangText en="Consequence:" si="ප්‍රතිවිපාකය:" mode={langMode} />
+                        </span>
+                        <p className="text-[11px] text-slate-400">
+                          <DualLangText 
+                            en="Loss of respect; signals total ignorance of reporting lines."
+                            si="ගෞරවය නැතිවීම; ධුරාවලිය පිළිබඳ අවබෝධයක් නොමැතිකම පෙන්නුම් කරයි."
+                            mode={langMode}
+                          />
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Scenario B */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between print-card">
+                      <div>
+                        <span className="text-[10px] font-mono bg-tech-900/50 text-tech-300 px-2 py-0.5 rounded-full uppercase tracking-wider">Scenario B | සිදුවීම B</span>
+                        <h3 className="text-base font-bold text-white mt-3 mb-2">
+                          <DualLangText en="Online Meeting Decorum Breach" si="මාර්ගගත රැස්වීම් අලංකරණය උල්ලංඝනය කිරීම" mode={langMode} />
+                        </h3>
+                        <DualLangText 
+                          en="During a critical international client review on Zoom, an engineer keeps video off and chews food near an active mic."
+                          si="සූම් (Zoom) සාකච්ඡාවක් අතරතුර, ඉංජිනේරුවරයෙකු සිය කැමරාව ක්‍රියා විරහිත කර මයික්‍රෆෝනය ක්‍රියාත්මකව තබා ආහාර බුදිමින් සිටී."
+                          mode={langMode}
+                          className="text-xs text-slate-300 leading-relaxed"
+                        />
+                      </div>
+                      <div className="mt-5 pt-3 border-t border-slate-800/80">
+                        <span className="text-xs font-semibold text-red-400 block mb-1">
+                          <DualLangText en="Consequence:" si="ප්‍රතිවිපාකය:" mode={langMode} />
+                        </span>
+                        <p className="text-[11px] text-slate-400">
+                          <DualLangText 
+                            en="Client terminates contract due to poor corporate standards."
+                            si="කාර්යාලීය විනයක් නොමැති කම නිසා සේවාදායකයා ගිවිසුම අවලංගු කරයි."
+                            mode={langMode}
+                          />
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Scenario C */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between print-card">
+                      <div>
+                        <span className="text-[10px] font-mono bg-amber-900/50 text-amber-300 px-2 py-0.5 rounded-full uppercase tracking-wider">Scenario C | සිදුවීම C</span>
+                        <h3 className="text-base font-bold text-white mt-3 mb-2">
+                          <DualLangText en="Midnight WhatsApp Spam" si="නිල නොවන වේලාවන්හි වට්ස්ඇප් භාවිතය" mode={langMode} />
+                        </h3>
+                        <DualLangText 
+                          en="A project executive texts an official client at 11:45 PM over WhatsApp with urgent status queries using multiples of emojis."
+                          si="ව්‍යාපෘති නිලධාරියෙකු රාත්‍රී 11:45 ට නිල සේවාදායකයෙකුට වට්ස්ඇප් හරහා ඉමෝජි කිහිපයක් යොදමින් හදිසි ප්‍රශ්න මාලාවක් යවයි."
+                          mode={langMode}
+                          className="text-xs text-slate-300 leading-relaxed"
+                        />
+                      </div>
+                      <div className="mt-5 pt-3 border-t border-slate-800/80">
+                        <span className="text-xs font-semibold text-red-400 block mb-1">
+                          <DualLangText en="Consequence:" si="ප්‍රතිවිපාකය:" mode={langMode} />
+                        </span>
+                        <p className="text-[11px] text-slate-400">
+                          <DualLangText 
+                            en="Client registers a complaint about boundary intrusion and poor Netiquette."
+                            si="සේවාදායකයා පෞද්ගලික සීමාවන් ආක්‍රමණය කිරීම සම්බන්ධව ආයතනයට පැමිණිලි කරයි."
+                            mode={langMode}
+                          />
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 4: DIAGNOSTIC LAB */}
+              {activeTab === 'diagnostic' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">⚙️</span>
+                      <DualLangText en="DIAGNOSTIC LAB: Real-time Etiquette Ratios" si="පරීක්ෂණාගාරය: තත්කාලීන ආචාරශීලීත්ව දර්ශක" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    {/* Diagnostic Tool 1: Executive Presence Index */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 md:p-6 print-card">
+                      <h3 className="text-base font-bold text-brand-400 mb-1 flex justify-between items-center">
+                        <DualLangText en="1. Executive Presence Index (EPI)" si="1. විධායක පෞරුෂ දර්ශකය (EPI)" mode={langMode} />
+                        <span className="text-xs font-mono bg-slate-800 px-2.5 py-0.5 rounded text-white">{epScore} / 10</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mb-6">
+                        <DualLangText en="Simulate physical traits of professional introductions based on 'The 7-Second Rule'." si="තත්පර 7 රීතිය අනුව පළමු හමුවීමේ සාර්ථකත්වය මැන බලන්න." mode={langMode} />
+                      </p>
+
+                      <div className="space-y-4">
+                        {/* Slider 1 */}
+                        <div>
+                          <div className="flex justify-between text-xs text-slate-300 mb-1">
+                            <DualLangText en="Eye Contact Alignment" si="ඇස් සම්බන්ධතාවය" mode={langMode} />
+                            <span className="font-mono">{eyeSlider}</span>
+                          </div>
+                          <input 
+                            type="range" min="1" max="10" value={eyeSlider} 
+                            onChange={(e) => setEyeSlider(parseInt(e.target.value))}
+                            className="w-full accent-brand-500 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Slider 2 */}
+                        <div>
+                          <div className="flex justify-between text-xs text-slate-300 mb-1">
+                            <DualLangText en="Handshake Grip Strength" si="අතට අත දීමේ ශක්තිය" mode={langMode} />
+                            <span className="font-mono">{handshakeSlider}</span>
+                          </div>
+                          <input 
+                            type="range" min="1" max="10" value={handshakeSlider} 
+                            onChange={(e) => setHandshakeSlider(parseInt(e.target.value))}
+                            className="w-full accent-brand-500 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Slider 3 */}
+                        <div>
+                          <div className="flex justify-between text-xs text-slate-300 mb-1">
+                            <DualLangText en="Attire Professionalism" si="ඇඳුම් පැළඳුම් මට්ටම" mode={langMode} />
+                            <span className="font-mono">{attireSlider}</span>
+                          </div>
+                          <input 
+                            type="range" min="1" max="10" value={attireSlider} 
+                            onChange={(e) => setAttireSlider(parseInt(e.target.value))}
+                            className="w-full accent-brand-500 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Slider 4 */}
+                        <div>
+                          <div className="flex justify-between text-xs text-slate-300 mb-1">
+                            <DualLangText en="Vocal Pitch & Warmth" si="කටහඬේ ස්වරය සහ උණුසුම" mode={langMode} />
+                            <span className="font-mono">{voiceSlider}</span>
+                          </div>
+                          <input 
+                            type="range" min="1" max="10" value={voiceSlider} 
+                            onChange={(e) => setVoiceSlider(parseInt(e.target.value))}
+                            className="w-full accent-brand-500 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Dynamic Visual Feedback Card */}
+                      <div className={`mt-6 p-4 rounded-lg border transition duration-300 ${
+                        epScore >= 8 
+                          ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-400' 
+                          : epScore >= 5 
+                          ? 'bg-blue-950/20 border-blue-500/30 text-blue-400' 
+                          : 'bg-red-950/20 border-red-500/30 text-red-400'
+                      }`}>
+                        <div className="font-bold text-xs uppercase tracking-wider mb-1">
+                          {epScore >= 8 ? (
+                            <DualLangText en="Emerald Status: High Influence Profile" si="විශිෂ්ට මට්ටම: ඉහළ බලපෑම්කාරී පෞරුෂයකි" mode={langMode} />
+                          ) : epScore >= 5 ? (
+                            <DualLangText en="Blue Status: Standard Safe Presence" si="සාමාන්‍ය මට්ටම: පිළිගත හැකි හැඟීමක්" mode={langMode} />
+                          ) : (
+                            <DualLangText en="Critical Alert: High Gaffe Potential" si="අවදානම් සහගතයි: වහාම වෙනස් කළ යුතුය" mode={langMode} />
+                          )}
+                        </div>
+                        <p className="text-xs leading-relaxed text-slate-300">
+                          {epScore >= 8 ? (
+                            <DualLangText en="Your physical demeanor represents immediate authority and signals professional confidence instantly." si="ඔබගේ ශරීර ඉරියව්වලින් වෘත්තීය විශ්වාසය සහ බලපෑම ක්ෂණිකව පෙන්නුම් කෙරේ." mode={langMode} />
+                          ) : epScore >= 5 ? (
+                            <DualLangText en="Standard office presence. Sharpen your posture and eye alignment to move into high-impact corporate tiers." si="සාමාන්‍ය මට්ටමේ පෙනුමකි. ඉහළ වෘත්තීය සාර්ථකත්වයක් සඳහා තවදුරටත් ඉරියව් වර්ධනය කරගන්න." mode={langMode} />
+                          ) : (
+                            <DualLangText en="High risk of leaving a bad impression. Stand tall, execute structured handshakes, and project your voice." si="අසතුටුදායක පළමු හැඟීමක් ඇති වීමේ ඉහළ අවදානමක් ඇත. කෙළින් සිටගන්න, නිසි ආචාර කිරීම් පුහුණු වන්න." mode={langMode} />
+                          )}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Diagnostic Tool 2: Digital Netiquette Risk Index */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 md:p-6 print-card">
+                      <h3 className="text-base font-bold text-tech-400 mb-1 flex justify-between items-center">
+                        <DualLangText en="2. Digital Netiquette Risk Index (DNRI)" si="2. ඩිජිටල් නෙටිකට් අවදානම් දර්ශකය (DNRI)" mode={langMode} />
+                        <span className="text-xs font-mono bg-slate-800 px-2.5 py-0.5 rounded text-white">{netiquetteRisk} / 10</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mb-6">
+                        <DualLangText en="Calculates the hidden threat level of your business messaging patterns." si="ඔබගේ ව්‍යාපාරික පණිවිඩකරණ විලාසයේ පවතින අවදානම් මට්ටම ගණනය කරන්න." mode={langMode} />
+                      </p>
+
+                      <div className="space-y-4">
+                        
+                        {/* Slider 1: Response delay */}
+                        <div>
+                          <div className="flex justify-between text-xs text-slate-300 mb-1">
+                            <DualLangText en="Response Delay (Hours)" si="පණිවිඩයට පිළිතුරු දීමට ගත වන කාලය (පැය)" mode={langMode} />
+                            <span className="font-mono">{responseTime}h</span>
+                          </div>
+                          <input 
+                            type="range" min="1" max="48" value={responseTime} 
+                            onChange={(e) => setResponseTime(parseInt(e.target.value))}
+                            className="w-full accent-tech-500 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Slider 2: Emojis count */}
+                        <div>
+                          <div className="flex justify-between text-xs text-slate-300 mb-1">
+                            <DualLangText en="Emoji Density (Per message)" si="ඉමෝජි සංඛ්‍යාව (පණිවිඩයකට)" mode={langMode} />
+                            <span className="font-mono">{emojisCount}</span>
+                          </div>
+                          <input 
+                            type="range" min="0" max="15" value={emojisCount} 
+                            onChange={(e) => setEmojisCount(parseInt(e.target.value))}
+                            className="w-full accent-tech-500 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Switch Option for Caps Lock */}
+                        <div className="flex justify-between items-center pt-2">
+                          <div>
+                            <span className="text-xs text-slate-300 block">
+                              <DualLangText en="Using Caps Lock / Urgent Exclamations" si="සියල්ල ලොකු අකුරින් ලිවීම හෝ ඉක්මන් සංඥා" mode={langMode} />
+                            </span>
+                            <span className="text-[10px] text-slate-500">
+                              <DualLangText en="Sending emails with ALL CAPS signals shouting." si="සියල්ල කැපිටල් අකුරින් ලිවීම කෑගැසීමක් බඳුය." mode={langMode} />
+                            </span>
+                          </div>
+                          <button 
+                            onClick={() => setCapsOn(!capsOn)}
+                            className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 focus:outline-none ${capsOn ? 'bg-tech-500' : 'bg-slate-800'}`}
+                          >
+                            <div className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${capsOn ? 'translate-x-6' : 'translate-x-0'}`}></div>
+                          </button>
+                        </div>
+
+                      </div>
+
+                      {/* Dynamic Feedback Card */}
+                      <div className={`mt-6 p-4 rounded-lg border transition duration-300 ${
+                        netiquetteRisk < 4 
+                          ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-400' 
+                          : netiquetteRisk < 7 
+                          ? 'bg-blue-950/20 border-blue-500/30 text-blue-400' 
+                          : 'bg-red-950/20 border-red-500/30 text-red-400'
+                      }`}>
+                        <div className="font-bold text-xs uppercase tracking-wider mb-1">
+                          {netiquetteRisk < 4 ? (
+                            <DualLangText en="High Netiquette Alignment" si="නෙටිකට් අනුකූලතාවය ඉහළයි" mode={langMode} />
+                          ) : netiquetteRisk < 7 ? (
+                            <DualLangText en="Moderate Friction Risk" si="මධ්‍යස්ථ අවදානමක් පවතී" mode={langMode} />
+                          ) : (
+                            <DualLangText en="Severe Digital Gaffe Hazard" si="බරපතල ඩිජිටල් අතපසුවීම් අනතුරක්" mode={langMode} />
+                          )}
+                        </div>
+                        <p className="text-xs leading-relaxed text-slate-300">
+                          {netiquetteRisk < 4 ? (
+                            <DualLangText en="Your digital communication is crisp, formal, respectful of timeline rules, and signals top-tier netiquette." si="ඔබගේ ඩිජිටල් සන්නිවේදනය පැහැදිලි, විධිමත් සහ නෙටිකට් නීතිවලට අනුකූල වේ." mode={langMode} />
+                          ) : netiquetteRisk < 7 ? (
+                            <DualLangText en="Minor infractions found. Reduce emojis in professional chats and maintain a clean layout." si="යම් අවිධිමත් ලක්ෂණ ඇත. වෘත්තීය සන්නිවේදනයේදී ඉමෝජි භාවිතය සීමා කරන්න." mode={langMode} />
+                          ) : (
+                            <DualLangText en="Caps Lock usage, slow replies, and high emoji density make communication appear aggressive or chaotic." si="සියල්ල කැපිටල් අකුරින් ලිවීම, ප්‍රමාද වී පිළිතුරු දීම සන්නිවේදනය අවුල් සහගත කරයි." mode={langMode} />
+                          )}
+                        </p>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 5: SYSTEM SIMULATION 1 (Email Builder) */}
+              {activeTab === 'sim1' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">🖥️</span>
+                      <DualLangText en="SYSTEM SIMULATION 1: High-Impact Email Analyzer" si="පාලන පුවරු පරීක්ෂණය 1: ඊමේල් විශ්ලේෂකය" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    {/* Input Builder Panel */}
+                    <div className="lg:col-span-5 bg-slate-900/50 border border-slate-800 rounded-xl p-5 print-card">
+                      <h3 className="text-sm font-bold text-slate-100 mb-4 uppercase tracking-wider">
+                        <DualLangText en="Build Your Message Parameters" si="පරාමිතීන් තෝරන්න" mode={langMode} />
+                      </h3>
+
+                      <div className="space-y-4">
+                        
+                        {/* Parameter 1 */}
+                        <div>
+                          <label className="text-xs text-slate-300 block mb-1">
+                            <DualLangText en="Salutation & Greeting Style" si="ආරම්භක ආචාර කිරීම" mode={langMode} />
+                          </label>
+                          <select 
+                            value={emailSalutation} 
+                            onChange={(e) => setEmailSalutation(e.target.value)}
+                            className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:border-brand-500 focus:outline-none"
+                          >
+                            <option value="formal">Dear Dr. Perera, (විධිමත්)</option>
+                            <option value="semi">Hi Dr. Amal, (අර්ධ විධිමත්)</option>
+                            <option value="casual">Hey! What's up, (අවිධිමත්)</option>
+                          </select>
+                        </div>
+
+                        {/* Parameter 2 */}
+                        <div>
+                          <label className="text-xs text-slate-300 block mb-1">
+                            <DualLangText en="Body Copy Tone Pattern" si="පණිවිඩයේ අභ්‍යන්තර ස්වරය" mode={langMode} />
+                          </label>
+                          <select 
+                            value={emailTone} 
+                            onChange={(e) => setEmailTone(e.target.value)}
+                            className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:border-brand-500 focus:outline-none"
+                          >
+                            <option value="assertive">Assertive & Goal-Aligned (ආත්මවිශ්වාසී සහ පැහැදිලි)</option>
+                            <option value="passive">Passive & Apologetic (අවිශ්වාසී සහ සමාව අයදින)</option>
+                            <option value="aggressive">Aggressive & Demanding (අධිපතිවාදී සහ බලපෑම් සහගත)</option>
+                          </select>
+                        </div>
+
+                        {/* Parameter 3 */}
+                        <div>
+                          <label className="text-xs text-slate-300 block mb-1">
+                            <DualLangText en="Sign-off Closing Style" si="අවසානයට ආචාර කිරීම" mode={langMode} />
+                          </label>
+                          <select 
+                            value={emailClosing} 
+                            onChange={(e) => setEmailClosing(e.target.value)}
+                            className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:border-brand-500 focus:outline-none"
+                          >
+                            <option value="formal">Best Regards, [Your Name] (විධිමත්)</option>
+                            <option value="semi">Thanks, (අර්ධ විධිමත්)</option>
+                            <option value="casual">Cheers! See ya, (අවිධිමත්)</option>
+                          </select>
+                        </div>
+
+                        {/* Trigger button */}
+                        <button
+                          onClick={triggerEmailAnalysis}
+                          disabled={isAnalyzingEmail}
+                          className="w-full bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 text-slate-950 font-bold text-xs py-2.5 rounded transition uppercase tracking-widest mt-2"
+                        >
+                          {isAnalyzingEmail ? (
+                            <span className="flex items-center justify-center space-x-2">
+                              <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
+                              <span><DualLangText en="Processing..." si="විශ්ලේෂණය වෙමින්..." mode={langMode} /></span>
+                            </span>
+                          ) : (
+                            <DualLangText en="Analyze Impact Ratio" si="බලපෑම් මට්ටම ගණනය කරන්න" mode={langMode} />
+                          )}
+                        </button>
+
+                      </div>
+                    </div>
+
+                    {/* Output Terminal Visualizer */}
+                    <div className="lg:col-span-7 bg-slate-950/80 border border-slate-800 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between print-card">
+                      <div>
+                        <div className="flex justify-between items-center pb-2 border-b border-slate-850 mb-4">
+                          <span className="text-[10px] font-mono text-slate-500">Live Rendered CSS Grid Alignment Terminal</span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-tech-500"></span>
+                        </div>
+
+                        {/* Virtual Email Render Box */}
+                        <div className="bg-slate-900/40 p-4 rounded-lg border border-slate-800 text-xs font-mono mb-4 text-slate-300">
+                          <div className="text-slate-500 border-b border-slate-850 pb-2 mb-2">Subject: Module 04 Business Deliverable Evaluation</div>
+                          
+                          {/* Salutation Preview */}
+                          <div className={`p-1.5 rounded mb-2 transition ${emailSalutation === 'formal' ? 'bg-emerald-950/10 text-emerald-400' : 'bg-red-950/10 text-red-400'}`}>
+                            {emailSalutation === 'formal' && "Dear Dr. Perera,"}
+                            {emailSalutation === 'semi' && "Hi Dr. Amal,"}
+                            {emailSalutation === 'casual' && "Hey! What's up,"}
+                            <span className="text-[8px] block text-slate-500 mt-1">[Salutation Node]</span>
+                          </div>
+
+                          {/* Body Preview */}
+                          <div className={`p-1.5 rounded mb-2 transition ${emailTone === 'assertive' ? 'bg-emerald-950/10 text-emerald-400' : emailTone === 'passive' ? 'bg-blue-950/10 text-blue-400' : 'bg-red-950/10 text-red-400'}`}>
+                            {emailTone === 'assertive' && "Following up on the pipeline review, I have structured the timeline. Please verify the attachments for alignment."}
+                            {emailTone === 'passive' && "Sorry to bother you, I know you are busy but I have attached the file here when you can check it please."}
+                            {emailTone === 'aggressive' && "I need this checked right now! There are mistakes and delays in your approvals that are slowing my department down!"}
+                            <span className="text-[8px] block text-slate-500 mt-1">[Body Copy Alignment Node]</span>
+                          </div>
+
+                          {/* Closing Preview */}
+                          <div className={`p-1.5 rounded transition ${emailClosing === 'formal' ? 'bg-emerald-950/10 text-emerald-400' : 'bg-red-950/10 text-red-400'}`}>
+                            {emailClosing === 'formal' && "Best Regards, \nMalith Jayasinghe"}
+                            {emailClosing === 'semi' && "Thanks, \nMalith"}
+                            {emailClosing === 'casual' && "Cheers! See ya, \nMalith"}
+                            <span className="text-[8px] block text-slate-500 mt-1">[Closing/Sign-off Node]</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Display Results */}
+                      {analysisOutput ? (
+                        <div className={`border p-4 rounded-lg transition duration-200 ${analysisOutput.color}`}>
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-xs font-bold uppercase tracking-wider">Analysis Result: {analysisOutput.level}</span>
+                            <span className="text-base font-bold font-mono">{analysisOutput.score}% Impact</span>
+                          </div>
+                          <p className="text-xs text-slate-300">
+                            <DualLangText en={analysisOutput.feedbackEn} si={analysisOutput.feedbackSi} mode={langMode} />
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="border border-slate-800 border-dashed p-4 rounded-lg text-center text-xs text-slate-500">
+                          <DualLangText en="Adjust the parameters and click Analyze to view the visual evaluation metric." si="පරාමිතීන් සකස් කර විශ්ලේෂණ බොත්තම ඔබන්න." mode={langMode} />
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 6: SYSTEM SIMULATION 2 (The Cascade) */}
+              {activeTab === 'sim2' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">🎯</span>
+                      <DualLangText en="SYSTEM SIMULATION 2: First Impression Cascade" si="පාලන පුවරු පරීක්ෂණය 2: මුල් හැඟීමේ දාමය" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-5 print-card">
+                    <p className="text-xs text-slate-400 mb-6">
+                      <DualLangText en="See how small non-verbal gestures at Level 1 ripple down and cascade into high-level business relationship outputs." si="පළමු මට්ටමේ කුඩා වාචික නොවන හැසිරීමක් අවසාන ව්‍යාපාරික ප්‍රතිඵලයට බලපාන ආකාරය නිරීක්ෂණය කරන්න." mode={langMode} />
+                    </p>
+
+                    {/* Inputs to Trigger Cascade */}
+                    <div className="flex flex-wrap gap-4 mb-8">
+                      <div>
+                        <span className="text-xs text-slate-400 block mb-1">Level 1 Gesture (ඉරියව්ව)</span>
+                        <div className="inline-flex rounded-md shadow-sm">
+                          <button 
+                            onClick={() => setCascadePosture('upright')}
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-l-md border ${cascadePosture === 'upright' ? 'bg-brand-600 text-slate-950 border-brand-600' : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'}`}
+                          >
+                            Upright Posture (කෙළින් සිටීම)
+                          </button>
+                          <button 
+                            onClick={() => setCascadePosture('slouched')}
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-r-md border-t border-b border-r ${cascadePosture === 'slouched' ? 'bg-red-600 text-white border-red-600' : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'}`}
+                          >
+                            Slouched (ඇද වී සිටීම)
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <span className="text-xs text-slate-400 block mb-1">Greeting Alignment (ආචාර කිරීම්)</span>
+                        <div className="inline-flex rounded-md shadow-sm">
+                          <button 
+                            onClick={() => setCascadeGreeting('perfect')}
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-l-md border ${cascadeGreeting === 'perfect' ? 'bg-brand-600 text-slate-950 border-brand-600' : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'}`}
+                          >
+                            Perfect Handshake (නිසි අතට අත දීම)
+                          </button>
+                          <button 
+                            onClick={() => setCascadeGreeting('weak')}
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-r-md border-t border-b border-r ${cascadeGreeting === 'weak' ? 'bg-red-600 text-white border-red-600' : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'}`}
+                          >
+                            Weak Nod Only (හිස සැලීම පමණක්)
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Interactive Tree Nodes Visualization */}
+                    <div className="space-y-6 relative before:absolute before:inset-0 before:left-6 before:border-l-2 before:border-slate-800/80 before:h-full">
+                      
+                      {/* Node 1 */}
+                      <div className="flex items-start space-x-4 relative">
+                        <div className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 z-10 font-bold transition duration-300 ${cascadePosture === 'upright' ? 'bg-brand-950 border-brand-500 text-brand-400' : 'bg-red-950 border-red-500 text-red-400'}`}>
+                          01
+                        </div>
+                        <div className="flex-1 pt-1">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">Level 1: Physiological Cue (පළමු මට්ටම: කායික ඉරියව්ව)</h4>
+                          <p className="text-sm text-slate-100">
+                            {cascadePosture === 'upright' ? (
+                              <DualLangText en="Active posture signals alertness and respect, invoking immediate brain alignment in counterpart." si="කෙළින් සිටීමෙන් අවධානය සහ ගෞරවය විදහා දක්වයි, සාකච්ඡාවට හිතකර පසුබිමක් සාදයි." mode={langMode} />
+                            ) : (
+                              <DualLangText en="Slouched posture signals boredom or defense, triggering subtle instant mistrust." si="ඇද වී සිටීම උදාසීන බවක් හඟවයි, සන්නිවේදනයේදීම අවිශ්වාසය ඇති කරයි." mode={langMode} />
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Node 2 */}
+                      <div className="flex items-start space-x-4 relative">
+                        <div className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 z-10 font-bold transition duration-300 ${cascadeGreeting === 'perfect' ? 'bg-brand-950 border-brand-500 text-brand-400' : 'bg-red-950 border-red-500 text-red-400'}`}>
+                          02
+                        </div>
+                        <div className="flex-1 pt-1">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">Level 2: Vocal and Tactile Greeting (දෙවන මට්ටම: ආචාර කිරීම)</h4>
+                          <p className="text-sm text-slate-100">
+                            {cascadeGreeting === 'perfect' ? (
+                              <DualLangText en="Structured warm hand grasp maps to dopamine activation and professional parity." si="නිවැරදි ශක්තිමත් අතට අත දීම වෘත්තීය සමානාත්මතාවය තහවුරු කරයි." mode={langMode} />
+                            ) : (
+                              <DualLangText en="Avoidant nod registers as dismissive and arrogant, shutting down collaborative channels." si="හිස සැලීම පමණක් කිරීම නොසැලකිලිමත් හෝ අහංකාර ලෙස ලියාපදිංචි වේ." mode={langMode} />
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Node 3 */}
+                      <div className="flex items-start space-x-4 relative">
+                        <div className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 z-10 font-bold transition duration-300 ${(cascadePosture === 'upright' && cascadeGreeting === 'perfect') ? 'bg-brand-950 border-brand-500 text-brand-400' : 'bg-red-950 border-red-500 text-red-400'}`}>
+                          03
+                        </div>
+                        <div className="flex-1 pt-1">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">Level 3: Strategic Deal Conversion Output (අවසාන මට්ටම: සාකච්ඡාවේ ප්‍රතිඵලය)</h4>
+                          <p className="text-sm font-semibold">
+                            {(cascadePosture === 'upright' && cascadeGreeting === 'perfect') ? (
+                              <DualLangText en="SUCCESS: Multi-million rupee trust pathway established. Next-level technical evaluations scheduled." si="සාර්ථකයි: විශ්වාසදායක සන්නිවේදනයක් ගොඩනැඟිණි. ඊළඟ මට්ටමේ සාකච්ඡා සඳහා මග පෑදේ." mode={langMode} className="text-emerald-400" />
+                            ) : (
+                              <DualLangText en="FAIL: Cognitive friction. Investor terminates proceedings citing cultural and behavioral misalignment." si="අසාර්ථකයි: චර්යාත්මක ගැටුම්. වෘත්තීය විනය නොමැති බව පවසමින් සාකච්ඡා නවතා දමයි." mode={langMode} className="text-red-400" />
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 7: SYSTEM SIMULATION 3 (Workflow Sim) */}
+              {activeTab === 'sim3' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">🔄</span>
+                      <DualLangText en="SYSTEM SIMULATION 3: Workflow Protocol Contrast" si="පාලන පුවරු පරීක්ෂණය 3: වැඩ ප්‍රවාහ වෙනස්කම්" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-5 print-card">
+                    
+                    {/* Toggle Selector */}
+                    <div className="flex justify-center mb-6">
+                      <div className="bg-slate-950 p-1 border border-slate-800 rounded-lg inline-flex">
+                        <button
+                          onClick={() => setWorkflowType('boardroom')}
+                          className={`px-4 py-2 text-xs font-semibold rounded-md transition ${workflowType === 'boardroom' ? 'bg-brand-600 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-100'}`}
+                        >
+                          <DualLangText en="Boardroom Meeting Workflow" si="සාම්ප්‍රදායික රැස්වීම් වැඩප්‍රවාහය" mode={langMode} />
+                        </button>
+                        <button
+                          onClick={() => setWorkflowType('digital')}
+                          className={`px-4 py-2 text-xs font-semibold rounded-md transition ${workflowType === 'digital' ? 'bg-tech-600 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-100'}`}
+                        >
+                          <DualLangText en="Digital Remote Netiquette" si="ඩිජිටල් නෙටිකට් වැඩප්‍රවාහය" mode={langMode} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Render Workflow Layouts dynamically based on selected workflow type */}
+                    {workflowType === 'boardroom' ? (
+                      <div className="space-y-4">
+                        <div className="text-center pb-3">
+                          <p className="text-xs font-mono text-brand-400 uppercase tracking-wider">RIGID LINEAR TIMELINE (විධිමත් රේඛීය පියවර මාලාව)</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                          <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Step 01</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Agenda Dispatch</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Send agenda 24 hours prior.</p>
+                          </div>
+                          
+                          <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Step 02</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Seating Protocol</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Seat hosts relative to hierarchy.</p>
+                          </div>
+
+                          <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Step 03</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Introductions</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Introduce lowest ranking to highest.</p>
+                          </div>
+
+                          <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Step 04</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Active Listening</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">No phone interruptions allowed.</p>
+                          </div>
+
+                          <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Step 05</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Minutes Draft</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Log decisions formally.</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 p-4 bg-slate-950/40 rounded-lg border border-slate-850">
+                          <p className="text-xs text-slate-300">
+                            <DualLangText 
+                              en="Traditional boardroom protocol focuses heavily on physical boundaries and seniority. The sequence is absolute and linear to enforce discipline."
+                              si="සාම්ප්‍රදායික රැස්වීම් කාමර ආචාරධර්ම ප්‍රධාන වශයෙන් භෞතික සීමාවන් සහ ජ්‍යෙෂ්ඨත්වය කෙරෙහි අවධානය යොමු කරයි. විනය ආරක්ෂා කිරීම සඳහා මෙම පියවර අනිවාර්ය වේ."
+                              mode={langMode}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="text-center pb-3">
+                          <p className="text-xs font-mono text-tech-400 uppercase tracking-wider">CIRCULAR INTERACTIVE CYCLES (ඩිජිටල් වටකුරු වැඩ ප්‍රවාහය)</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Pre-Meeting</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Tech Check</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Test audio & camera feeds 5 mins early.</p>
+                          </div>
+
+                          <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Execution</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Mute & Frame</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Frame head to chest. Mute if not speaking.</p>
+                          </div>
+
+                          <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Interaction</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Chat Decorum</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Avoid emojis; post targeted inputs.</p>
+                          </div>
+
+                          <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-850 text-center">
+                            <span className="text-[10px] font-mono text-slate-500">Post-Meeting</span>
+                            <h4 className="text-xs font-bold text-slate-200 mt-1">Action Items</h4>
+                            <p className="text-[10px] text-slate-400 mt-1">Submit digital dashboard notes.</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 p-4 bg-slate-950/40 rounded-lg border border-slate-850">
+                          <p className="text-xs text-slate-300">
+                            <DualLangText 
+                              en="Digital Netiquette is agile and continuous. It focuses on clarity, minimizing digital noise, and respect for other team members' timelines."
+                              si="ඩිජිටල් නෙටිකට් නම්‍යශීලී සන්නිවේදනයක් ඇති කරයි. මෙහිදී පැහැදිලි බව, තාක්ෂණික බාධා අවම කිරීම සහ අන් අයගේ කාලයට ගරු කිරීම ප්‍රමුඛ වේ."
+                              mode={langMode}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+                </section>
+              )}
+
+              {/* TAB 8: BREAKOUT ROOMS */}
+              {activeTab === 'chat' && (
+                <section className="space-y-6">
+                  <div className="border-b border-slate-850 pb-3">
+                    <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <span className="text-brand-500">💬</span>
+                      <DualLangText en="BREAKOUT ROOMS: High-Impact Discussion Prompts" si="කණ්ඩායම් කාමර: සාකච්ඡා ප්‍රශ්න මාලාව" mode={langMode} />
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    {/* Left List of Prompts */}
+                    <div className="lg:col-span-5 space-y-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <button
+                          key={num}
+                          onClick={() => setActivePrompt(num)}
+                          className={`w-full p-3 text-left rounded-lg text-xs font-semibold transition border ${
+                            activePrompt === num 
+                              ? 'bg-slate-900 border-brand-500/30 text-brand-400' 
+                              : 'bg-slate-950 border-slate-850 text-slate-400 hover:bg-slate-900'
+                          }`}
+                        >
+                          <span className="block text-[10px] text-slate-500 font-mono mb-1">PROMPT 0{num}</span>
+                          {num === 1 && <DualLangText en="The Seniority Greeting Dilemma" si="ජ්‍යෙෂ්ඨත්වය අනුව ආචාර කිරීමේ ගැටලුව" mode={langMode} />}
+                          {num === 2 && <DualLangText en="Off-Hours Work WhatsApp Protocol" si="නිල නොවන වේලාවන්හි වට්ස්ඇප් භාවිතය" mode={langMode} />}
+                          {num === 3 && <DualLangText en="Flat Hierarchy Communication Hazards" si="නිදහස් සන්නිවේදන රටාවේ පවතින අවදානම" mode={langMode} />}
+                          {num === 4 && <DualLangText en="The 7-Second Virtual Impression" si="අන්තර්ජාලය තුළ තත්පර 7 පළමු හැඟීම" mode={langMode} />}
+                          {num === 5 && <DualLangText en="Using Emoticons in Board Inquiries" si="ඉහළ නිලධාරීන්ගේ ප්‍රශ්න කිරීම් සඳහා ඉමෝජි භාවිතය" mode={langMode} />}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Interactive Prompt Detail Panel with Voting Simulation */}
+                    <div className="lg:col-span-7 bg-slate-900/40 border border-slate-850 rounded-xl p-5 md:p-6 flex flex-col justify-between print-card">
+                      
+                      {/* Active Prompt Details */}
+                      <div>
+                        <div className="pb-3 border-b border-slate-850 mb-4">
+                          <span className="text-[10px] font-mono text-brand-400 uppercase tracking-wider">Breakout Challenge Details | සාකච්ඡා මාතෘකාව</span>
+                        </div>
+
+                        {activePrompt === 1 && (
+                          <div className="space-y-4">
+                            <h3 className="text-base font-bold text-white">The Seniority Greeting Dilemma</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              <DualLangText 
+                                en="A junior engineer walks into a boardroom where the CEO and an external foreign client are seated. The junior greets the CEO first and ignores the client. Is this a major gaffe?"
+                                si="කනිෂ්ඨ ඉංජිනේරුවරයෙකු ආයතනයේ ප්‍රධාන විධායක නිලධාරී සහ විදේශීය සේවාදායකයෙකු සිටින රැස්වීම් කාමරයකට ඇතුළු වේ. ඔහු මුලින්ම ප්‍රධාන විධායක නිලධාරියාට ආචාර කර සේවාදායකයා නොසලකා හරියි. මෙය බරපතල වරදක්ද?"
+                                mode={langMode}
+                              />
+                            </p>
+                          </div>
+                        )}
+
+                        {activePrompt === 2 && (
+                          <div className="space-y-4">
+                            <h3 className="text-base font-bold text-white">Off-Hours Work WhatsApp Protocol</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              <DualLangText 
+                                en="A team supervisor sends an analytical assignment on a team WhatsApp group at 10 PM. A subordinate replies at 10:15 PM arguing about task details using frustrated wording. Who violated Netiquette?"
+                                si="කණ්ඩායම් අධීක්ෂකයෙකු රාත්‍රී 10 ට වට්ස්ඇප් (WhatsApp) සමූහයකට පැවරුමක් යවයි. සාමාජිකයෙකු රාත්‍රී 10:15 ට ඊට පිළිතුරු සපයමින් කෝපාවිෂ්ට වචන භාවිත කරයි. මෙහිදී නෙටිකට් නීති උල්ලංඝනය කළේ කවුද?"
+                                mode={langMode}
+                              />
+                            </p>
+                          </div>
+                        )}
+
+                        {activePrompt === 3 && (
+                          <div className="space-y-4">
+                            <h3 className="text-base font-bold text-white">Flat Hierarchy Communication Hazards</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              <DualLangText 
+                                en="Because of a 'flat culture' policy, a marketing specialist emails the Chairman directly to complain about her manager's operational scheduling, bypassing the Director entirely. Is this professional escalation?"
+                                si="ආයතනයේ පවතින සරල සන්නිවේදන රටාව නිසා, අලෙවිකරණ විශේෂඥයෙකු තම කළමනාකරුගේ කාලසටහන පිළිබඳව අධ්‍යක්ෂවරයාව මඟහරිමින් සෘජුවම සභාපතිවරයා වෙත ඊමේල් පණිවිඩයක් යවයි. මෙය වෘත්තීය ක්‍රමවේදයක්ද?"
+                                mode={langMode}
+                              />
+                            </p>
+                          </div>
+                        )}
+
+                        {activePrompt === 4 && (
+                          <div className="space-y-4">
+                            <h3 className="text-base font-bold text-white">The 7-Second Virtual Impression</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              <DualLangText 
+                                en="Does the 7-Second Rule hold true in video calls? Can a pixelated camera or dark background damage your executive credibility as much as a weak handshake?"
+                                si="වීඩියෝ ඇමතුම් සඳහා තත්පර 7 රීතිය අදාළ වේද? පැහැදිලි නොවන කැමරා දර්ශන හෝ අඳුරු පසුබිම දුර්වල අතට අත දීමක් මෙන් ඔබගේ වෘත්තීය ප්‍රතිරූපයට හානි කළ හැකිද?"
+                                mode={langMode}
+                              />
+                            </p>
+                          </div>
+                        )}
+
+                        {activePrompt === 5 && (
+                          <div className="space-y-4">
+                            <h3 className="text-base font-bold text-white">Using Emoticons in Board Inquiries</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              <DualLangText 
+                                en="Is it ever acceptable to use emojis like 👍 or 🙏 in emails to institutional board members if you have a personal, high-trust relationship with them?"
+                                si="ආයතනික අධ්‍යක්ෂ මණ්ඩලයේ සාමාජිකයන් සමඟ සමීප සබඳතාවක් තිබුණද, ඊමේල් පණිවිඩවල 👍 හෝ 🙏 වැනි ඉමෝජි භාවිත කිරීම සුදුසුද?"
+                                mode={langMode}
+                              />
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Dynamic Mock Student Poll Feedback Loop */}
+                      <div className="mt-8 pt-4 border-t border-slate-850">
+                        <span className="text-[10px] font-mono text-slate-500 block mb-2">Simulate Student Votes | පන්ති කාමර මනාපය</span>
+                        
+                        <div className="flex space-x-3 mb-4">
+                          <button
+                            onClick={() => handleVote(activePrompt, 'yes')}
+                            disabled={userVoted[activePrompt]}
+                            className={`flex-1 py-1.5 rounded text-xs font-semibold border transition ${
+                              userVoted[activePrompt] === 'yes'
+                                ? 'bg-emerald-600 text-slate-950 border-emerald-600 font-bold'
+                                : 'bg-slate-950 border-slate-850 text-emerald-400 hover:bg-slate-900'
+                            }`}
+                          >
+                            <DualLangText en="It is a Gaffe / Unprofessional" si="එය බරපතල වැරැද්දකි" mode={langMode} />
+                          </button>
+                          
+                          <button
+                            onClick={() => handleVote(activePrompt, 'no')}
+                            disabled={userVoted[activePrompt]}
+                            className={`flex-1 py-1.5 rounded text-xs font-semibold border transition ${
+                              userVoted[activePrompt] === 'no'
+                                ? 'bg-red-600 text-white border-red-600 font-bold'
+                                : 'bg-slate-950 border-slate-850 text-red-400 hover:bg-slate-900'
+                            }`}
+                          >
+                            <DualLangText en="Acceptable / Context Dependent" si="සන්දර්භය අනුව පිළිගත හැකිය" mode={langMode} />
+                          </button>
+                        </div>
+
+                        {/* Votes Results Bars */}
+                        <div className="space-y-2">
+                          <div>
+                            <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                              <span><DualLangText en="Gaffe Count" si="වැරැද්දක් ලෙස සලකන" mode={langMode} /></span>
+                              <span className="font-mono">{votes[activePrompt].yes} votes</span>
+                            </div>
+                            <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                              <div 
+                                className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" 
+                                style={{ width: `${(votes[activePrompt].yes / (votes[activePrompt].yes + votes[activePrompt].no)) * 100}%` }}
+                              ></div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                              <span><DualLangText en="Acceptable Count" si="පිළිගත හැකි ලෙස සලකන" mode={langMode} /></span>
+                              <span className="font-mono">{votes[activePrompt].no} votes</span>
+                            </div>
+                            <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                              <div 
+                                className="bg-red-500 h-1.5 rounded-full transition-all duration-500" 
+                                style={{ width: `${(votes[activePrompt].no / (votes[activePrompt].yes + votes[activePrompt].no)) * 100}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                </section>
+              )}
+
+            </main>
+          </div>
+          
+          {/* STATIC DECORATIVE FOOTER */}
+          <footer className="bg-slate-950 border-t border-slate-900 py-3 px-6 text-center text-[10px] text-slate-500 flex flex-col md:flex-row justify-between items-center no-print shrink-0">
+            <div>
+              <DualLangText en="OBISL Module 04: Realization-Driven Learning Sandbox" si="OBISL මොඩියුලය 04: සැබෑ ලෝකයේ ව්‍යාපාරික ආචාරශීලීත්වය ප්‍රගුණ කිරීම" mode={langMode} />
+            </div>
+            <div className="mt-1 md:mt-0 font-mono">
+              IP Security Token: OFP-M4-ACTIVE | System Status: Verified
+            </div>
+          </footer>
+
+        </div>
+      );
+    }
+
+    // Render App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+
+</body>
+</html>
